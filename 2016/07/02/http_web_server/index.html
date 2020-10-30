@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta name="author" content="Hey-f">
+
+
+
+<meta name="description" content="Http协议是什么 协议是指计算机通信网络中两台计算机之间进行通信所必须共同遵守的法定活规则，超文本传输协议（HTTP）是一种通信协议，它允许将超文本标记语言文档从web服务器传送到客户端的浏览器。  HTTP协议的特点 支持客户端/服务器模式 无状态，此处的无状态是指对事务无记忆能力，如果后续需要这些信息，那么需要重新传递获取数据。 简单快速，客户端只需要发送请求方法和路径到服务端，请求方式有g">
+<meta name="keywords" content="Http,web">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Http通信协议">
+<meta property="og:url" content="https://wangqiong.me/2016/07/02/http_web_server/index.html">
+<meta property="og:site_name" content="不可及">
+<meta property="og:description" content="Http协议是什么 协议是指计算机通信网络中两台计算机之间进行通信所必须共同遵守的法定活规则，超文本传输协议（HTTP）是一种通信协议，它允许将超文本标记语言文档从web服务器传送到客户端的浏览器。  HTTP协议的特点 支持客户端/服务器模式 无状态，此处的无状态是指对事务无记忆能力，如果后续需要这些信息，那么需要重新传递获取数据。 简单快速，客户端只需要发送请求方法和路径到服务端，请求方式有g">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2016-07-02T08:30:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Http通信协议">
+<meta name="twitter:description" content="Http协议是什么 协议是指计算机通信网络中两台计算机之间进行通信所必须共同遵守的法定活规则，超文本传输协议（HTTP）是一种通信协议，它允许将超文本标记语言文档从web服务器传送到客户端的浏览器。  HTTP协议的特点 支持客户端/服务器模式 无状态，此处的无状态是指对事务无记忆能力，如果后续需要这些信息，那么需要重新传递获取数据。 简单快速，客户端只需要发送请求方法和路径到服务端，请求方式有g">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="不可及" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Http通信协议 | 不可及</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: false
+    };
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?382ac27e195392c0cc8aaf4929019a82";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Hey-f</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">识时务者</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="https://www.halfmy.com">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:me@halfmy.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/heyfgirl" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GO/">GO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GoPath/">GoPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GoRoot/">GoRoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm安装/">npm安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pgsql/">pgsql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postgres/">postgres</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rinetd/">rinetd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequelize/">sequelize</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/事务/">事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令/">命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/增量备份/">增量备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务器/">服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/端口转发/">端口转发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/管道/">管道</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/防火墙/">防火墙</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://bengbu-yuezhang.github.io/">ZY</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://blog.hanrea.com/">Hanrea</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Hey-f</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Hey-f</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">识时务者</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="https://www.halfmy.com">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:me@halfmy.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/heyfgirl" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我">
+</nav>
+      <div class="body-wrap"><article id="post-http_web_server" class="article article-type-post" itemscope="" itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/02/http_web_server/" class="article-date">
+      <time datetime="2016-07-02T08:30:49.000Z" itemprop="datePublished">2016-07-02</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Http通信协议
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Http/">Http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web/">web</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="Http协议是什么"><a href="#Http协议是什么" class="headerlink" title="Http协议是什么"></a>Http协议是什么</h3><p><strong> 协议是指计算机通信网络中两台计算机之间进行通信所必须共同遵守的法定活规则，超文本传输协议（HTTP）是一种通信协议，它允许将超文本标记语言文档从web服务器传送到客户端的浏览器。 </strong></p>
+<h3 id="HTTP协议的特点"><a href="#HTTP协议的特点" class="headerlink" title="HTTP协议的特点"></a>HTTP协议的特点</h3><ul>
+<li>支持客户端/服务器模式</li>
+<li>无状态，此处的无状态是指对事务无记忆能力，如果后续需要这些信息，那么需要重新传递获取数据。</li>
+<li>简单快速，客户端只需要发送请求方法和路径到服务端，请求方式有get,post,head,put,delete,options,trace,关于此处的解释移步此处.</li>
+<li>无连接，指每次处理只限制处理一个连接.服务器处理完客户的请求，并收到客户的应答后，即断开连接。采用这种方式可以节省传输时间。</li>
+<li>灵活，HTTP请求允许发送任意类型的数据。当前请求类型可以查看Content-Type</li>
+</ul>
+<h3 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h3><blockquote>
+<p>1.<strong>Date头域</strong><br><em>Date头域表示消息发送的时间，时间的描述格式由rfc822定义。例如，Date:Mon,31Dec200104:25:57GMT。Date描述的时间表示世界标准时，换算成本地时间，需要知道用户所在的时区。</em><br>2.<strong>Pragma头域</strong><br><em>Pragma头域用来包含实现特定的指令，最常用的是Pragma:no-cache。在HTTP/1.1协议中，它的含义和Cache- Control:no-cache相同。</em><br>3.<strong>Host头域</strong><br><em>Host头域指定请求资源的Intenet主机和端口号，必须表示请求url的原始服务器或网关的位置。HTTP/1.1请求必须包含主机头域，否则系统会以400状态码返回。</em><br>4.<strong>Referer头域</strong><br><em>Referer 头域允许客户端指定请求uri的源资源地址，这可以允许服务器生成回退链表，可用来登陆、优化cache等。他也允许废除的或错误的连接由于维护的目的被 追踪。如果请求的uri没有自己的uri地址，Referer不能被发送。如果指定的是部分uri地址，则此地址应该是一个相对地址。</em><br>5.<strong>Cache-Control头域 指定请求和响应遵循的缓存机制</strong><br><em>Cache- Control指定请求和响应遵循的缓存机制。在请求消息或响应消息中设置 Cache-Control并不会修改另一个消息处理过程中的缓存处理过程。请求时的缓存指令包括no-cache、no-store、max-age、 max-stale、min-fresh、only-if-cached，响应消息中的指令包括public、private、no-cache、no- store、no-transform、must-revalidate、proxy-revalidate、max-age</em></p>
+<ul>
+<li>Public指示响应可被任何缓存区缓存。 </li>
+<li>Private指示对于单个用户的整个或部分响应消息，不能被共享缓存处理。这允许服务器仅仅描述当用户的部分响应消息，此响应消息对于其他用户的请求无效。 </li>
+<li>no-cache指示请求或响应消息不能缓存 </li>
+<li>no-store用于防止重要的信息被无意的发布。在请求消息中发送将使得请求和响应消息都不使用缓存。</li>
+<li>max-age指示客户机可以接收生存期不大于指定时间（以秒为单位）的响应。 </li>
+<li>min-fresh指示客户机可以接收响应时间小于当前时间加上指定时间的响应。 </li>
+<li>max-stale指示客户机可以接收超出超时期间的响应消息。如果指定max-stale消息的值，那么客户机可以接收超出超时期指定值之内的响应消息<br>6.<strong>Range头域</strong><br><em>Range头域可以请求实体的一个或者多个子范围。例如:</em></li>
+<li>表示头500个字节：bytes=0-499</li>
+<li>表示第二个500字节：bytes=500-999 </li>
+<li>表示最后500个字节：bytes=-500 </li>
+<li>表示500字节以后的范围：bytes=500- </li>
+<li>第一个和最后一个字节：bytes=0-0,-1 </li>
+<li>同时指定几个范围：bytes=500-600,601-999 </li>
+<li>但是服务器可以忽略此请求头，如果无条件GET包含Range请求头，响应会以状态码206（PartialContent）返回而不是以200 （OK）。<br>7.<strong>User-Agent头域</strong><br><em>User-Agent头域的内容包含发出请求的用户信息。HTTP- Version表示支持的HTTP版本，例如为HTTP/1.1。Status- Code是一个三个数字的结果代码。Reason-Phrase给Status-Code提供一个简单的文本描述。Status-Code主要用于机器自 动识别，Reason-Phrase主要用于帮助用户理解。Status-Code的第一个数字定义响应的类别，后两个数字没有分类的作用。浏览器类型，如果Servlet返回的内容与浏览器类型有关则该值非常有用。</em></li>
+</ul>
+</blockquote>
+<h3 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h3><blockquote>
+<p>响应消息行：包含协议/版本，响应状态码，对响应状态码的描述（一切正常）<br>响应消息头：服务器与客户端通信的暗码，告诉客户端该怎么执行某些操作<br>响应消息正文：和网页右键“查看源码”看到的内容一样<br>1.<strong>状态行（HTTP/1.1 200 OK）</strong></p>
+<ul>
+<li>协议版本号。</li>
+<li>状态代码：状态代码由3位数字组成，表示请求是否被理解或被满足。<ul>
+<li>200   OK    客户端请求成功</li>
+<li>400   Bad Request   由于客户端请求有语法错误，不能被服务器所理解。</li>
+<li>301   （302）   重定向—要完成请求必须进行更进一步的操作。</li>
+<li>304   缓存</li>
+<li>401   Unauthonzed   请求未经授权。这个状态代码必须和WWW-Authenticate报头域一起使用</li>
+<li>403   Forbidden   服务器收到请求，但是拒绝提供服务。服务器通常会在响应正文中给出不提供服务的原因()</li>
+<li>404   Not Found   请求的资源不存在，例如，输入了错误的URL。</li>
+<li>500   Internal Server Error 服务器发生不可预期的错误，导致无法完成客户端的请求。</li>
+<li>503   Service Unavailable   服务器当前不能够处理客户端的请求，在一段时间之后，服务器可能会恢复正常。</li>
+</ul>
+</li>
+<li>状态描述：状态描述给出了关于状态代码的简短的文字描述。<br>2.<strong>响应头</strong><br>Location：响应报头域用于重定向接受者到一个新的位置。<br>Server： 响应报头域包含了服务器用来处理请求的软件信息。0</li>
+</ul>
+</blockquote>
+
+      <script>
+        window.disqusProxy={
+          shortname: 'halfmy',
+          username: 'halfmy',
+          server: 'halfmy.com/disqus',
+          port: 80,
+          adminAvatar: '/avatars/admin-avatar.jpg',
+          identifier: '2016/07/02/http_web_server/',
+        };
+        window.disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = window.disqusProxy.identifier;
+        };
+      </script>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/07/02/http_web_server/">Http通信协议</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Hey-f</a></p>
+        <p><span>发布时间:</span>2016-07-02, 16:30:49</p>
+        <p><span>最后更新:</span>2016-07-02, 16:30:49</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/07/02/http_web_server/" title="Http通信协议">https://wangqiong.me/2016/07/02/http_web_server/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://wangqiong.me/2016/07/02/http_web_server/　　作者: Hey-f" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <!-- <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。 -->
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/05/26/deep-copy/">
+                    JavaScript 的深复制
+                </a>
+            </div>
+        
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Http协议是什么"><span class="toc-number">1.</span> <span class="toc-text">Http协议是什么</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP协议的特点"><span class="toc-number">2.</span> <span class="toc-text">HTTP协议的特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP请求"><span class="toc-number">3.</span> <span class="toc-text">HTTP请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP响应"><span class="toc-number">4.</span> <span class="toc-text">HTTP响应</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录" title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <!-- <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a> -->
+            <!-- <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a> -->
+            <!-- <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a> -->
+            <!-- <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a> -->
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <!-- <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a> -->
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Http通信协议　| 不可及　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    
+      <script src="//cdn.bootcss.com/react/16.0.0/umd/react.production.min.js"></script>
+      <script src="//cdn.bootcss.com/react-dom/16.0.0/umd/react-dom.production.min.js"></script>
+      <script src="//cdn.bootcss.com/fetch/2.0.3/fetch.min.js"></script>
+      <script src="//cdn.jsdelivr.net/npm/blockies-identicon@0.1.0/blockies.min.js"></script>
+      <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <div id="disqus_proxy_thread"><script src="/scripts/hexo-disqus-proxy-primary.js" async></script></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'https://wangqiong.me/2016/07/02/http_web_server/';
+            this.page.identifier = '2016/07/02/http_web_server/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//halfmy.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/05/26/deep-copy/" title="上一篇: JavaScript 的深复制">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/06/08/children-join-sql/">children_join_sql</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/08/buckup/">buckup</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/09/redis-contenxt/">redis_contenxt</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/30/request/">request</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/24/nginx-config/">nginx配置介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/24/git-reset/">git回滚操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/24/postgres-jsonb/">postgresql对jsonb类型字段操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/23/docker-logstash/">docker_logstash</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/23/docker-kafka/">docker_kafka</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/18/elasticsearch-and-kibana/">elasticsearch_and_kibana</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/16/rinetd/">rinetd</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/20/ssr-server/">ssr服务器安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/30/golang_protobuf/">go get 找不到 google.golang.org/protobuf 解决办法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/22/gorootandgopath/">GoRoot 和 GoPath</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/postgres-wal-lose/">postgres日志丢失导致无法重启</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/linux-cmd/">linux简单命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/docker-use-cmd/">docker简单命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/git-config/">git代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/redis-docker/">docker安装redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/27/postgres-array-operator/">postgres对Array的操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/27/docker-postgres-backup/">Docker上安装的postgres的备份以及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/27/ssh-t-github-error/">SSH连接主机Github</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/transaction-lock/">MySql和postgres的事务以及锁</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/28/ssh-pip-sql/">通过管道链接远程服务器上面的数据库</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/sequelize-control-pgsql/">sequelize操纵Pgsql</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/16/npm-global-fail/">npm全局安装的包命令不存在</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/25/node-safety-detail/">node安全性介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/node-highly-active-timer/">Node.js 中高效的 timer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/19/hexo-release/">Hexo发布到Github</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/centos_server/">小作坊的服务器购买须知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/iptables_config/">Iptables 安装与设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/ssh_error/">SSH无法链接linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/11/node_http_flow/">Node.js中Http的从请求到响应</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/13/node-buffer-memory-allocation/">Node.js 中 Buffer 的 8KB 池分配规则和固定位数字的读写</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/26/deep-copy/">JavaScript 的深复制</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/02/http_web_server/">Http通信协议</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2015-2020 Hey-f
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a><!--  <i class="fa fa-heart animated infinite pulse"></i>  -->
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style="display:none">
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style="display:none">
+                        <span id="page-visit" title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 6;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+             tags: ".article-tag a", 
+             categories: ".article-category a, a.tag-list-link", 
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta name="author" content="Hey-f">
+
+
+
+<meta name="description" content="第三方库的实现Underscore —— _.clone()在 Underscore 中有这样一个方法：_.clone()，这个方法实际上是一种浅复制 (shallow-copy)，所有嵌套的对象和数组都是直接复制引用而并没有进行深复制。来看一下例子应该会更加直观：123456789101112var x = &amp;#123;    a: 1,    b: &amp;#123; z: 0 &amp;#125;&amp;#12">
+<meta name="keywords" content="半个我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 的深复制">
+<meta property="og:url" content="https://wangqiong.me/2017/05/26/deep-copy/index.html">
+<meta property="og:site_name" content="不可及">
+<meta property="og:description" content="第三方库的实现Underscore —— _.clone()在 Underscore 中有这样一个方法：_.clone()，这个方法实际上是一种浅复制 (shallow-copy)，所有嵌套的对象和数组都是直接复制引用而并没有进行深复制。来看一下例子应该会更加直观：123456789101112var x = &amp;#123;    a: 1,    b: &amp;#123; z: 0 &amp;#125;&amp;#12">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2017-05-26T07:24:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript 的深复制">
+<meta name="twitter:description" content="第三方库的实现Underscore —— _.clone()在 Underscore 中有这样一个方法：_.clone()，这个方法实际上是一种浅复制 (shallow-copy)，所有嵌套的对象和数组都是直接复制引用而并没有进行深复制。来看一下例子应该会更加直观：123456789101112var x = &amp;#123;    a: 1,    b: &amp;#123; z: 0 &amp;#125;&amp;#12">
+
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="不可及" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>JavaScript 的深复制 | 不可及</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: false
+    };
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?382ac27e195392c0cc8aaf4929019a82";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head></html>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Hey-f</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">识时务者</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="https://www.halfmy.com">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:me@halfmy.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/heyfgirl" title="GitHub"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/">CentOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GO/">GO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GoPath/">GoPath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GoRoot/">GoRoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Http/">Http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm安装/">npm安装</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pgsql/">pgsql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postgres/">postgres</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rinetd/">rinetd</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sequelize/">sequelize</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/">ssh</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/事务/">事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令/">命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/增量备份/">增量备份</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/服务器/">服务器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/端口转发/">端口转发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/管道/">管道</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/锁/">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/防火墙/">防火墙</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://bengbu-yuezhang.github.io/">ZY</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://blog.hanrea.com/">Hanrea</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Hey-f</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Hey-f</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">识时务者</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="https://www.halfmy.com">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:me@halfmy.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/heyfgirl" title="GitHub"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我">
+</nav>
+      <div class="body-wrap"><article id="post-deep-copy" class="article article-type-post" itemscope="" itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/05/26/deep-copy/" class="article-date">
+      <time datetime="2017-05-26T07:24:59.000Z" itemprop="datePublished">2017-05-26</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript 的深复制
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="第三方库的实现"><a href="#第三方库的实现" class="headerlink" title="第三方库的实现"></a>第三方库的实现</h2><h3 id="Underscore-——-clone"><a href="#Underscore-——-clone" class="headerlink" title="Underscore —— _.clone()"></a>Underscore —— _.clone()</h3><p>在 Underscore 中有这样一个方法：_.clone()，这个方法实际上是一种浅复制 (shallow-copy)，所有嵌套的对象和数组都是直接复制引用而并没有进行深复制。来看一下例子应该会更加直观：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = &#123;</span><br><span class="line">    a: <span class="number">1</span>,</span><br><span class="line">    b: &#123; <span class="attr">z</span>: <span class="number">0</span> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> y = _.clone(x);</span><br><span class="line"></span><br><span class="line">y === x       <span class="comment">// false</span></span><br><span class="line">y.b === x.b   <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">x.b.z = <span class="number">100</span>;</span><br><span class="line">y.b.z         <span class="comment">// 100</span></span><br></pre></td></tr></table></figure></p>
+<p>让我们来看一下 Underscore 的源码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a (shallow-cloned) duplicate of an object.</span></span><br><span class="line">_.clone = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!_.isObject(obj)) <span class="keyword">return</span> obj;</span><br><span class="line">  <span class="keyword">return</span> _.isArray(obj) ? obj.slice() : _.extend(&#123;&#125;, obj);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>如果目标对象是一个数组，则直接调用数组的slice()方法，否则就是用_.extend()方法。想必大家对extend()方法不会陌生，它的作用主要是将从第二个参数开始的所有对象，按键值逐个赋给第一个对象。而在 jQuery 中也有类似的方法。关于 Underscore 中的 _.extend() 方法的实现可以参考 underscore.js #L1006。</p>
+<p>Underscore 的 clone() 不能算作深复制，但它至少比直接赋值来得“深”一些，它创建了一个新的对象。另外，你也可以通过以下比较 tricky 的方法来完成单层嵌套的深复制：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> _ = <span class="built_in">require</span>(<span class="string">'underscore'</span>);</span><br><span class="line"><span class="keyword">var</span> a = [&#123;<span class="attr">f</span>: <span class="number">1</span>&#125;, &#123;<span class="attr">f</span>:<span class="number">5</span>&#125;, &#123;<span class="attr">f</span>:<span class="number">10</span>&#125;];</span><br><span class="line"><span class="keyword">var</span> b = _.map(a, _.clone);       <span class="comment">// &lt;----</span></span><br><span class="line">b[<span class="number">1</span>].f = <span class="number">55</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(a));  <span class="comment">// [&#123;"f":1&#125;,&#123;"f":5&#125;,&#123;"f":10&#125;]</span></span><br></pre></td></tr></table></figure>
+<h3 id="jQuery-——-clone-extend"><a href="#jQuery-——-clone-extend" class="headerlink" title="jQuery —— $.clone() / $.extend()"></a>jQuery —— $.clone() / $.extend()</h3><p>在 jQuery 中也有这么一个叫 $.clone() 的方法，可是它并不是用于一般的 JS 对象的深复制，而是用于 DOM 对象。这不是这篇文章的重点，所以感兴趣的同学可以参考jQuery的文档。与 Underscore 类似，我们也是可以通过 $.extend() 方法来完成深复制。值得庆幸的是，我们在 jQuery 中可以通过添加一个参数来实现递归extend。调用$.extend(true, {}, …)就可以实现深复制啦，参考下面的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = &#123;</span><br><span class="line">    a: <span class="number">1</span>,</span><br><span class="line">    b: &#123; <span class="attr">f</span>: &#123; <span class="attr">g</span>: <span class="number">1</span> &#125; &#125;,</span><br><span class="line">    c: [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> ]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> y = $.extend(&#123;&#125;, x),          <span class="comment">//shallow copy</span></span><br><span class="line">    z = $.extend(<span class="literal">true</span>, &#123;&#125;, x);    <span class="comment">//deep copy</span></span><br><span class="line"></span><br><span class="line">y.b.f === x.b.f       <span class="comment">// true</span></span><br><span class="line">z.b.f === x.b.f       <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<p>在 jQuery的源码 - src/core.js #L121 文件中我们可以找到$.extend()的实现，也是实现得比较简洁，而且不太依赖于 jQuery 的内置函数，稍作修改就能拿出来单独使用。</p>
+<h3 id="lodash-——-clone-cloneDeep"><a href="#lodash-——-clone-cloneDeep" class="headerlink" title="lodash —— _.clone() / _.cloneDeep()"></a>lodash —— _.clone() / _.cloneDeep()</h3><p>在lodash中关于复制的方法有两个，分别是<em>.clone()和</em>.cloneDeep()。其中<em>.clone(obj, true)等价于</em>.cloneDeep(obj)。使用上，lodash和前两者并没有太大的区别，但看了源码会发现，Underscore 的实现只有30行左右，而 jQuery 也不过60多行。可 lodash 中与深复制相关的代码却有上百行，这是什么道理呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">"jquery"</span>),</span><br><span class="line">  _ = <span class="built_in">require</span>(<span class="string">"lodash"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr = <span class="keyword">new</span> <span class="built_in">Int16Array</span>(<span class="number">5</span>),</span><br><span class="line">    obj = &#123; <span class="attr">a</span>: arr &#125;,</span><br><span class="line">    obj2;</span><br><span class="line">arr[<span class="number">0</span>] = <span class="number">5</span>;</span><br><span class="line">arr[<span class="number">1</span>] = <span class="number">6</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. jQuery</span></span><br><span class="line">obj2 = $.extend(<span class="literal">true</span>, &#123;&#125;, obj);</span><br><span class="line"><span class="built_in">console</span>.log(obj2.a);                            <span class="comment">// [5, 6, 0, 0, 0]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(obj2);           <span class="comment">// [object Int16Array]</span></span><br><span class="line">obj2.a[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj);                               <span class="comment">// [100, 6, 0, 0, 0]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//此处jQuery不能正确处理Int16Array的深复制！！！</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. lodash</span></span><br><span class="line">obj2 = _.cloneDeep(obj);                       </span><br><span class="line"><span class="built_in">console</span>.log(obj2.a);                            <span class="comment">// [5, 6, 0, 0, 0]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(arr2);           <span class="comment">// [object Int16Array]</span></span><br><span class="line">obj2.a[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj);                               <span class="comment">// [5, 6, 0, 0, 0]</span></span><br></pre></td></tr></table></figure>
+<p>通过上面这个例子可以初见端倪，jQuery 无法正确深复制 JSON 对象以外的对象，而我们可以从下面这段代码片段可以看出 lodash 花了大量的代码来实现 ES6 引入的大量新的标准对象。更厉害的是，lodash 针对存在环的对象的处理也是非常出色的。因此相较而言，lodash 在深复制上的行为反馈比前两个库好很多，是更拥抱未来的一个第三方库。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** `Object#toString` result references. */</span></span><br><span class="line"><span class="keyword">var</span> argsTag = <span class="string">'[object Arguments]'</span>,</span><br><span class="line">    arrayTag = <span class="string">'[object Array]'</span>,</span><br><span class="line">    boolTag = <span class="string">'[object Boolean]'</span>,</span><br><span class="line">    dateTag = <span class="string">'[object Date]'</span>,</span><br><span class="line">    errorTag = <span class="string">'[object Error]'</span>,</span><br><span class="line">    funcTag = <span class="string">'[object Function]'</span>,</span><br><span class="line">    mapTag = <span class="string">'[object Map]'</span>,</span><br><span class="line">    numberTag = <span class="string">'[object Number]'</span>,</span><br><span class="line">    objectTag = <span class="string">'[object Object]'</span>,</span><br><span class="line">    regexpTag = <span class="string">'[object RegExp]'</span>,</span><br><span class="line">    setTag = <span class="string">'[object Set]'</span>,</span><br><span class="line">    stringTag = <span class="string">'[object String]'</span>,</span><br><span class="line">    weakMapTag = <span class="string">'[object WeakMap]'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arrayBufferTag = <span class="string">'[object ArrayBuffer]'</span>,</span><br><span class="line">    float32Tag = <span class="string">'[object Float32Array]'</span>,</span><br><span class="line">    float64Tag = <span class="string">'[object Float64Array]'</span>,</span><br><span class="line">    int8Tag = <span class="string">'[object Int8Array]'</span>,</span><br><span class="line">    int16Tag = <span class="string">'[object Int16Array]'</span>,</span><br><span class="line">    int32Tag = <span class="string">'[object Int32Array]'</span>,</span><br><span class="line">    uint8Tag = <span class="string">'[object Uint8Array]'</span>,</span><br><span class="line">    uint8ClampedTag = <span class="string">'[object Uint8ClampedArray]'</span>,</span><br><span class="line">    uint16Tag = <span class="string">'[object Uint16Array]'</span>,</span><br><span class="line">    uint32Tag = <span class="string">'[object Uint32Array]'</span>;</span><br></pre></td></tr></table></figure></p>
+<h2 id="借助-JSON-全局对象"><a href="#借助-JSON-全局对象" class="headerlink" title="借助 JSON 全局对象"></a>借助 JSON 全局对象</h2><p>相比于上面介绍的三个库的做法，针对纯 JSON 数据对象的深复制，使用 JSON 全局对象的 parse 和 stringify 方法来实现深复制也算是一个简单讨巧的方法。然而使用这种方法会有一些隐藏的坑，它能正确处理的对象只有 Number, String, Boolean, Array, 扁平对象，即那些能够被 json 直接表示的数据结构。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">jsonClone</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> clone = jsonClone(&#123; <span class="attr">a</span>:<span class="number">1</span> &#125;);</span><br></pre></td></tr></table></figure></p>
+
+      <script>
+        window.disqusProxy={
+          shortname: 'halfmy',
+          username: 'halfmy',
+          server: 'halfmy.com/disqus',
+          port: 80,
+          adminAvatar: '/avatars/admin-avatar.jpg',
+          identifier: '2017/05/26/deep-copy/',
+        };
+        window.disqus_config = function () {
+          this.page.url = window.location.href;
+          this.page.identifier = window.disqusProxy.identifier;
+        };
+      </script>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/05/26/deep-copy/">JavaScript 的深复制</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Hey-f</a></p>
+        <p><span>发布时间:</span>2017-05-26, 15:24:59</p>
+        <p><span>最后更新:</span>2017-05-26, 15:24:59</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/05/26/deep-copy/" title="JavaScript 的深复制">https://wangqiong.me/2017/05/26/deep-copy/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://wangqiong.me/2017/05/26/deep-copy/　　作者: Hey-f" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <!-- <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。 -->
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/06/13/node-buffer-memory-allocation/">
+                    Node.js 中 Buffer 的 8KB 池分配规则和固定位数字的读写
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/07/02/http_web_server/">
+                    Http通信协议
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#第三方库的实现"><span class="toc-number">1.</span> <span class="toc-text">第三方库的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Underscore-——-clone"><span class="toc-number">1.1.</span> <span class="toc-text">Underscore —— _.clone()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jQuery-——-clone-extend"><span class="toc-number">1.2.</span> <span class="toc-text">jQuery —— $.clone() / $.extend()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lodash-——-clone-cloneDeep"><span class="toc-number">1.3.</span> <span class="toc-text">lodash —— _.clone() / _.cloneDeep()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#借助-JSON-全局对象"><span class="toc-number">2.</span> <span class="toc-text">借助 JSON 全局对象</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录" title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <!-- <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a> -->
+            <!-- <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a> -->
+            <!-- <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a> -->
+            <!-- <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a> -->
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <!-- <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a> -->
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"JavaScript 的深复制　| 不可及　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    
+      <script src="//cdn.bootcss.com/react/16.0.0/umd/react.production.min.js"></script>
+      <script src="//cdn.bootcss.com/react-dom/16.0.0/umd/react-dom.production.min.js"></script>
+      <script src="//cdn.bootcss.com/fetch/2.0.3/fetch.min.js"></script>
+      <script src="//cdn.jsdelivr.net/npm/blockies-identicon@0.1.0/blockies.min.js"></script>
+      <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <div id="disqus_proxy_thread"><script src="/scripts/hexo-disqus-proxy-primary.js" async></script></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'https://wangqiong.me/2017/05/26/deep-copy/';
+            this.page.identifier = '2017/05/26/deep-copy/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//halfmy.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/06/13/node-buffer-memory-allocation/" title="上一篇: Node.js 中 Buffer 的 8KB 池分配规则和固定位数字的读写">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/07/02/http_web_server/" title="下一篇: Http通信协议">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2020/06/08/children-join-sql/">children_join_sql</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/06/08/buckup/">buckup</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/05/09/redis-contenxt/">redis_contenxt</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/30/request/">request</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/24/nginx-config/">nginx配置介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/24/git-reset/">git回滚操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/04/24/postgres-jsonb/">postgresql对jsonb类型字段操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/23/docker-logstash/">docker_logstash</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/23/docker-kafka/">docker_kafka</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/03/18/elasticsearch-and-kibana/">elasticsearch_and_kibana</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/02/16/rinetd/">rinetd</a></li><li class="post-list-item"><a class="post-list-link" href="/2020/01/20/ssr-server/">ssr服务器安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/30/golang_protobuf/">go get 找不到 google.golang.org/protobuf 解决办法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/22/gorootandgopath/">GoRoot 和 GoPath</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/postgres-wal-lose/">postgres日志丢失导致无法重启</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/linux-cmd/">linux简单命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/docker-use-cmd/">docker简单命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/git-config/">git代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/11/redis-docker/">docker安装redis</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/27/postgres-array-operator/">postgres对Array的操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/27/docker-postgres-backup/">Docker上安装的postgres的备份以及恢复</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/27/ssh-t-github-error/">SSH连接主机Github</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/08/13/transaction-lock/">MySql和postgres的事务以及锁</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/28/ssh-pip-sql/">通过管道链接远程服务器上面的数据库</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/sequelize-control-pgsql/">sequelize操纵Pgsql</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/16/npm-global-fail/">npm全局安装的包命令不存在</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/25/node-safety-detail/">node安全性介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/01/node-highly-active-timer/">Node.js 中高效的 timer</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/19/hexo-release/">Hexo发布到Github</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/centos_server/">小作坊的服务器购买须知</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/iptables_config/">Iptables 安装与设置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/ssh_error/">SSH无法链接linux</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/11/node_http_flow/">Node.js中Http的从请求到响应</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/13/node-buffer-memory-allocation/">Node.js 中 Buffer 的 8KB 池分配规则和固定位数字的读写</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/26/deep-copy/">JavaScript 的深复制</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/02/http_web_server/">Http通信协议</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2015-2020 Hey-f
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a><!--  <i class="fa fa-heart animated infinite pulse"></i>  -->
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style="display:none">
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style="display:none">
+                        <span id="page-visit" title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 6;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+             tags: ".article-tag a", 
+             categories: ".article-category a, a.tag-list-link", 
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
